@@ -1,0 +1,60 @@
+#include "bits/stdc++.h"
+using namespace std;
+#define ll long long
+#define pb push_back
+#define FAST                          \
+    ios_base::sync_with_stdio(false); \
+    cin.tie(NULL);                    \
+    cout.tie(NULL)
+#define readInputFile                 \
+    freopen("input.txt", "r", stdin); \
+    freopen("output.txt", "w", stdout);
+const ll N = 1e6 + 10;
+const ll inf = 1e18 + 12;
+ll n, m;
+vector<pair<int, int>> adj[N];
+void dijkstras(int k)
+{
+    vector<ll> dis(N, inf);
+    vector<ll> vis(N, 0);
+    set<pair<ll, ll>> st;
+    st.insert({0, k});
+    dis[k] = 0;
+
+    while (st.size() > 0)
+    {
+        auto it = *st.begin();
+        ll k_node = it.second;
+        st.erase(st.begin());
+        if (vis[k_node])
+            continue;
+        vis[k_node] = 1;
+
+        for (auto &i : adj[k_node])
+        {
+            if (dis[k_node] + i.second < dis[i.first])
+            {
+                dis[i.first] = i.second + dis[k_node];
+                st.insert({dis[i.first], i.first});
+            }
+        }
+    }
+
+    for (ll i = 1; i <= n; i++)
+    {
+        cout << dis[i] << " ";
+    }
+}
+int main()
+{
+    FAST;
+    cin >> n >> m;
+    for (ll i = 0; i < m; i++)
+    {
+        int x, y, wt;
+        cin >> x >> y >> wt;
+        adj[x].pb({y, wt});
+    }
+
+    dijkstras(1);
+}
