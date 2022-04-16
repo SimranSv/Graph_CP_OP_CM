@@ -1,12 +1,12 @@
-//Simran Vedpathak
-//https://www.codechef.com/problems/BITSWAPS
+// Simran Vedpathak
+// https://www.codechef.com/problems/BITSWAPS
 
 #include "bits/stdc++.h"
 using namespace std;
 #define ll long long
 #define pb push_back
 const ll INF = 1e9 + 7;
-const ll N = 3e5 + 10;
+const ll N = 3e6 + 10;
 #define FAST                          \
     ios_base::sync_with_stdio(false); \
     cin.tie(NULL);                    \
@@ -45,7 +45,6 @@ void solve()
     ll n;
     cin >> n;
     vector<ll> v(n), sorted(n);
-    vector<ll> adj[33];
     par.clear();
     Rank.clear();
 
@@ -59,37 +58,34 @@ void solve()
 
     for (ll j = 0; j <= 31; j++)
     {
+        ll temp = -1;
         for (auto i = 0; i < n; i++)
         {
-
             if (v[i] & ((ll)1 << j))
             {
-                adj[j].pb(v[i]);
+                temp = i;
+                break;
+            }
+        }
+
+        for (auto i = temp + 1; i < n; i++)
+        {
+            if (temp != -1 && v[i] & ((ll)1 << j))
+            {
+                union_set(v[temp], v[i]);
             }
         }
     }
 
-    for (int i = 0; i <= 31; i++)
-    {
-        for (int j = 1; j < adj[i].size(); j++)
-        {
-            union_set(adj[i][j-1], adj[i][j]);
-            
-        }
-       
-    }
     for (int i = 0; i < n; i++)
     {
-        if (find_parent(v[i]) != find_parent(sorted[i]))
+        if (par[v[i]] != par[sorted[i]])
         {
             cout << "NO\n";
-
             return;
         }
-        
     }
     cout << "YES\n";
-   
 }
 int main()
 {
